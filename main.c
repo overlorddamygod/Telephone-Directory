@@ -13,6 +13,11 @@ void show();
 void add();
 void delay(int milliseconds);
 
+struct contact {
+    char name[50];
+    char number[20];
+};
+
 int main() {
     int input,x;
     bool running=true;
@@ -95,7 +100,8 @@ void showInstructions() {
 void update() {
     FILE *fp, *temp;
     int count=0,id;
-    char details[50],name[20],number[10];
+    char details[50],name[50],number[11];
+    struct contact c;
     printf("Enter id to update : ");
     scanf("%d", &id);
     if (id<=0 || id>=(total_contacts()+1)) {
@@ -104,13 +110,13 @@ void update() {
         return;
     }
     printf("Enter new name : ");
-    scanf("%s",name);
+    scanf("%s",c.name);
     printf("Enter new number : ");
-    scanf("%s",number);
-    while (!(atoi(number) / 2)) {
-        error_message("Please enter a valid number");
-        printf("Enter new number : ");
-        scanf("%s",number);
+    scanf("%s",c.number);
+    while (!(atoi(c.number) / 2)) {
+        error_message("Please enter a valid Number");
+        printf("Enter new Number : ");
+        scanf("%s",c.number);
     }
     fp = fopen("tel.txt", "r");
     temp = fopen("tel_temp.txt", "w");
@@ -122,10 +128,10 @@ void update() {
 
             if (count == id) {
                 // Writing updated details to the file
-                fprintf(temp, "%d. %s %s \n", count,name, number);
+                fprintf(temp, "%d. %s %s \n", count,c.name, c.number);
                 printf("-------------------------------------------------\n");
                 printf("***** Successfully Updated *****\n");
-                printf("***** Name : %s | Number : %s *****\n",name,number);
+                printf("***** Name : %s | Number : %s *****\n",c.name,c.number);
                 printf("-------------------------------------------------\n");
             } else {
                 // Writing un-updated details to the file
@@ -211,28 +217,28 @@ void show() {
     }
 }
 void add() {
-    char name[20],number[10];
+    struct contact c;
     int total_contact=0;
     total_contact=total_contacts();
     FILE *fp;
     printf("Enter name : ");
-    scanf("%s",name);
+    scanf("%s",c.name);
     printf("Enter number : ");
-    scanf("%s",number);
-    while (!(atoi(number) / 2)) {
+    scanf("%s",c.number);
+    while (!(atoi(c.number) / 2)) {
         error_message("Please enter a valid number");
         printf("Enter number : ");
-        scanf("%s",number);
+        scanf("%s",c.number);
     }
     fp=fopen("tel.txt","a");
     if ( fp == NULL )
     {
         printf( "Error" );
     } else {
-        fprintf(fp, "%d. %s %s \n", total_contact+1,name, number);
+        fprintf(fp, "%d. %s %s \n", total_contact+1,c.name, c.number);
         printf("-------------------------------------------\n");
         printf("****** Successfully created contact. ******\n");
-        printf("***** Name : %s | Number : %s *****\n",name,number);
+        printf("***** Name : %s | Number : %s *****\n",c.name,c.number);
         printf("-------------------------------------------\n");
     }
     fclose(fp);
